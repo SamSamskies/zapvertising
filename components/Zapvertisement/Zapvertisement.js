@@ -39,7 +39,7 @@ export const Zapvertisement = ({ nip19Entity }) => {
         }}
       >
         <p className={styles.p} style={{ fontSize: 32 }}>
-          {nip19Entity} zapped 69 sats⚡️
+          SamSamskies zapped 69 sats⚡️
         </p>
         <p className={styles.p} style={{ fontSize: 64, marginTop: 8 }}>
           Vamos 🚀
