@@ -27,11 +27,11 @@ export default function Qrcode({ nip19Entity }) {
   return (
     <QRCodeSVG
       includeMargin
-      size={304}
+      size={800}
       imageSettings={{
         src: profileImageUrl,
-        height: 48,
-        width: 48,
+        height: 128,
+        width: 128,
         excavate: true,
       }}
       value={`nostr:${nip19Entity}`}
