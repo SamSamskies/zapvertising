@@ -1,0 +1,46 @@
+import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { isNpub } from "@/utils";
+
+export default function Qrcode({ nip19Entity }) {
+  const willFetchProfile = isNpub(nip19Entity);
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    "https://pbs.twimg.com/profile_images/1604195803748306944/LxHDoJ7P_400x400.jpg",
+  );
+
+  useEffect(() => {
+    if (!willFetchProfile) {
+      return;
+    }
+
+    try {
+      fetch(`/api/users/${nip19Entity}`)
+        .then((res) => res.json())
+        .then(({ picture }) => {
+          if (picture) {
+            setProfileImageUrl(picture);
+          }
+        });
+    } catch {}
+  }, [willFetchProfile]);
+
+  return (
+    <QRCodeSVG
+      includeMargin
+      size={304}
+      imageSettings={{
+        src: profileImageUrl,
+        height: 48,
+        width: 48,
+        excavate: true,
+      }}
+      value={`nostr:${nip19Entity}`}
+    />
+  );
+}
+
+export const getServerSideProps = ({ params }) => {
+  const { nip19Entity } = params;
+
+  return { props: { nip19Entity } };
+};
