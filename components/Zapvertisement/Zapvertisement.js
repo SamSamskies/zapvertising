@@ -38,10 +38,10 @@ export const Zapvertisement = ({ nip19Entity }) => {
           backgroundColor: "#565869",
         }}
       >
-        <p className={styles.p} style={{ fontSize: 32 }}>
+        <p className={styles.p} style={{ fontSize: 64 }}>
           SamSamskies zapped 69 sats⚡️
         </p>
-        <p className={styles.p} style={{ fontSize: 64, marginTop: 8 }}>
+        <p className={styles.p} style={{ fontSize: 88, marginTop: 8 }}>
           Vamos 🚀
         </p>
       </div>
