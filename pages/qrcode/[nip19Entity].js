@@ -30,8 +30,8 @@ export default function Qrcode({ nip19Entity }) {
       size={800}
       imageSettings={{
         src: profileImageUrl,
-        height: 128,
-        width: 128,
+        height: 112,
+        width: 112,
         excavate: true,
       }}
       value={`nostr:${nip19Entity}`}
