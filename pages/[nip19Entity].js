@@ -1,5 +1,7 @@
+import { Zapvertisement } from "@/components/Zapvertisement";
+
 export default function Nip19Entity({ nip19Entity }) {
-  return <p>TODO: display latest zap amount and content for {nip19Entity}</p>;
+  return <Zapvertisement nip19Entity={nip19Entity} />;
 }
 
 export const getServerSideProps = ({ params }) => {
