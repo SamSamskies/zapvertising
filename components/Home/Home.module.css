@@ -1,6 +1,7 @@
 .main {
-  width: 600px;
+  max-width: 600px;
   margin: 100px auto;
+  padding: 20px;
 }
 
 .form {
@@ -49,7 +50,7 @@
 
 .link {
   text-overflow: ellipsis;
-  max-width: 600px;
+  max-width: 100%;
   overflow: hidden;
   white-space: nowrap;
   display: inline-block;
