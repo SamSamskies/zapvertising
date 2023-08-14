@@ -22,7 +22,7 @@ export const Zapvertisement = ({
     const filter = getFilter(nip19Entity);
 
     if (!filter) {
-      setError("Invalid NIP19 entity");
+      setError("Invalid NIP-19 entity");
       return;
     }
 
@@ -37,6 +37,7 @@ export const Zapvertisement = ({
     const sub = pool.sub(relays, [filter]);
 
     sub.on("event", async (event) => {
+      console.log(event);
       const invoice = event.tags.find((t) => t[0] === "bolt11")[1];
       const satsAmount = getSatsAmount(invoice);
 

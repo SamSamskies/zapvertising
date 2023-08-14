@@ -1,15 +1,61 @@
+import { useState } from "react";
 import Head from "next/head";
 import styles from "./Home.module.css";
+import { nip19 } from "nostr-tools";
 
 export const Home = () => {
+  const [qrcodeUrl, setQrcodeUrl] = useState(null);
+  const [error, setError] = useState(null);
+  const [liveZapsUrl, setLiveZapsUrl] = useState(null);
+  const generateUrls = ({ nip19Entity, durationInMs, minSatsAmount }) => {
+    try {
+      const { type } = nip19.decode(nip19Entity);
+      const baseUrl = window.location.href;
+      const liveZapsUrl = new URL(`${baseUrl}${nip19Entity}`);
+      const searchParams = new URLSearchParams();
+
+      if (durationInMs) {
+        searchParams.append("durationInMs", durationInMs);
+      }
+
+      if (minSatsAmount) {
+        searchParams.append("minSatsAmount", minSatsAmount);
+      }
+
+      liveZapsUrl.search = searchParams.toString();
+
+      if (type === "npub") {
+        return {
+          qrcodeUrl: `${baseUrl}qrcode/${nip19Entity}`,
+          liveZapsUrl: liveZapsUrl.toString(),
+        };
+      }
+
+      if (["note", "nevent", "naddr"].includes(type)) {
+        return { qrcodeUrl: null, liveZapsUrl: liveZapsUrl.toString() };
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
-    const input = form.elements[0];
-    const value = input.value.trim();
-    if (value) {
-      window.location.href = `/${value}`;
+    const nip19Entity = form.elements[0].value.trim();
+    const durationInMs = form.elements[1].value.trim() * 1000;
+    const minSatsAmount = form.elements[2].value.trim();
+    const { qrcodeUrl, liveZapsUrl } =
+      generateUrls({ nip19Entity, durationInMs, minSatsAmount }) ?? {};
+
+    if (!qrcodeUrl && !liveZapsUrl) {
+      setError("Invalid NIP-19 entity");
     }
+
+    setQrcodeUrl(qrcodeUrl);
+    setLiveZapsUrl(liveZapsUrl);
   };
 
   return (
@@ -20,15 +66,68 @@ export const Home = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <input
-          className={styles.input}
-          placeholder="Enter npub, note ID, nevent, or naddr"
-        />
-        <button className={styles.button} type="submit">
-          Go
-        </button>
-      </form>
+      <main className={styles.main}>
+        <p>
+          Generate links to share live zaps on a live stream, at a live event,
+          or in a store. You can also generate a QR code for npubs.
+        </p>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            autoFocus
+            className={styles.input}
+            placeholder="Enter npub, note ID, nevent, or naddr"
+            required
+          />
+          <input
+            className={styles.input}
+            placeholder="Optional duration in seconds (defaults to 10s)"
+            type="number"
+          />
+          <input
+            className={styles.input}
+            placeholder="Optional min sats amount (defaults to 1)"
+            type="number"
+          />
+          <button className={styles.button} type="submit">
+            Generate Links
+          </button>
+        </form>
+        {error && <h1>{error}</h1>}
+        {qrcodeUrl && (
+          <>
+            <h4>Npub QR Code URL</h4>
+            <a
+              href={qrcodeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.link}
+            >
+              {qrcodeUrl}
+            </a>
+            <p>
+              For live streams, set browser source size to 800 x 800, then
+              resize and set position on screen as needed.
+            </p>
+          </>
+        )}
+        {liveZapsUrl && (
+          <>
+            <h4>Live Zaps URL</h4>
+            <a
+              href={liveZapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.link}
+            >
+              {liveZapsUrl}
+            </a>
+            <p>
+              For live streams, set browser source size to 1920 x 1080, then
+              resize and set position on screen as needed.
+            </p>
+          </>
+        )}
+      </main>
     </>
   );
 };
