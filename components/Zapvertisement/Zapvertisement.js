@@ -63,7 +63,7 @@ export const Zapvertisement = ({ nip19Entity }) => {
       if (messageDisplayQueue.current.length !== 0) {
         setCurrentMessage(messageDisplayQueue.current.shift());
       }
-    }, 5000);
+    }, 10000);
 
     return () => {
       clearInterval(intervalId);
