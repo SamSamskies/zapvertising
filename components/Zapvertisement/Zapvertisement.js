@@ -9,7 +9,7 @@ import {
 } from "@/utils";
 import styles from "./Zapvertisement.module.css";
 
-export const Zapvertisement = ({ nip19Entity }) => {
+export const Zapvertisement = ({ nip19Entity, durationInMs = 10000 }) => {
   const messageDisplayQueue = useRef([]);
   const [currentMessage, setCurrentMessage] = useState(null);
 
@@ -63,7 +63,7 @@ export const Zapvertisement = ({ nip19Entity }) => {
       if (messageDisplayQueue.current.length !== 0) {
         setCurrentMessage(messageDisplayQueue.current.shift());
       }
-    }, 10000);
+    }, durationInMs);
 
     return () => {
       clearInterval(intervalId);
