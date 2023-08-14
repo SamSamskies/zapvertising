@@ -37,7 +37,6 @@ export const Zapvertisement = ({
     const sub = pool.sub(relays, [filter]);
 
     sub.on("event", async (event) => {
-      console.log(event);
       const invoice = event.tags.find((t) => t[0] === "bolt11")[1];
       const satsAmount = getSatsAmount(invoice);
 

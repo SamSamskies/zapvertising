@@ -91,7 +91,6 @@ const truncateNip19Entity = (nip19Entity) => {
 
 export const getNormalizedName = async (npub) => {
   const userProfile = await getUserProfile(npub);
-  console.log({ userProfile });
 
   return (
     userProfile?.display_name || userProfile?.name || truncateNip19Entity(npub)
