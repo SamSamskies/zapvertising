@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "light-bolt11-decoder": "^3.0.0",
     "next": "13.4.13",
     "nostr-tools": "^1.14.0",
     "qrcode.react": "^3.1.0",

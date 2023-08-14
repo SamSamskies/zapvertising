@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { isNpub } from "@/utils";
+import { getUserProfile, isNpub } from "@/utils";
 
 export default function Qrcode({ nip19Entity }) {
   const willFetchProfile = isNpub(nip19Entity);
@@ -14,13 +14,11 @@ export default function Qrcode({ nip19Entity }) {
     }
 
     try {
-      fetch(`/api/users/${nip19Entity}`)
-        .then((res) => res.json())
-        .then(({ picture }) => {
-          if (picture) {
-            setProfileImageUrl(picture);
-          }
-        });
+      getUserProfile(nip19Entity).then(({ picture }) => {
+        if (picture) {
+          setProfileImageUrl(picture);
+        }
+      });
     } catch {}
   }, [willFetchProfile]);
 

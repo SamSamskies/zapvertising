@@ -1,3 +1,24 @@
+.root {
+  text-align: center;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.textContainer {
+  padding: 0 24px;
+  margin-bottom: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 24px;
+  height: 25vh;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #565869;
+}
+
 .p {
   margin: 0;
   text-align: center;
