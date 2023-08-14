@@ -21,10 +21,7 @@ export const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <input
-          className={styles.input}
-          placeholder="Enter npub, nevent, note ID"
-        />
+        <input className={styles.input} placeholder="Enter npub" />
         <button className={styles.button} type="submit">
           Go
         </button>
