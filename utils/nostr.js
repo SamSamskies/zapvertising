@@ -20,6 +20,40 @@ export const decodeNpub = (npub) => {
   }
 };
 
+export const getFilter = (nip19Entity) => {
+  const defaultFilter = {
+    kinds: [9735],
+    since: Math.round(Date.now() / 1000),
+  };
+
+  try {
+    const { type, data } = nip19.decode(nip19Entity);
+
+    if (type === "npub") {
+      return { ...defaultFilter, "#p": [data] };
+    }
+
+    if (type === "note") {
+      return { ...defaultFilter, "#e": [data] };
+    }
+
+    if (type === "nevent") {
+      return { ...defaultFilter, "#e": [data.id] };
+    }
+
+    if (type === "naddr") {
+      return {
+        ...defaultFilter,
+        "#a": [`${data.kind}:${data.pubkey}:${data.identifier}`],
+      };
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 export const extractZapRequest = (zapReceiptEvent) => {
   try {
     return JSON.parse(

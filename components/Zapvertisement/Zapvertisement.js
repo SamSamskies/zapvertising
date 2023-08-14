@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { SimplePool } from "nostr-tools";
 import {
-  decodeNpub,
   encodeNpub,
   extractZapRequest,
+  getFilter,
   getNormalizedName,
   getSatsAmount,
 } from "@/utils";
@@ -16,13 +16,13 @@ export const Zapvertisement = ({
 }) => {
   const messageDisplayQueue = useRef([]);
   const [currentMessage, setCurrentMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const pubkey = decodeNpub(nip19Entity);
+    const filter = getFilter(nip19Entity);
 
-    // Currently, only supporting npub entities
-    // TODO: add support for note, nevent, and zap.stream naddr entities
-    if (!pubkey) {
+    if (!filter) {
+      setError("Invalid NIP19 entity");
       return;
     }
 
@@ -34,13 +34,7 @@ export const Zapvertisement = ({
       "wss://nos.lol",
       "wss://relay.snort.social",
     ];
-    const sub = pool.sub(relays, [
-      {
-        kinds: [9735],
-        "#p": [pubkey],
-        since: Math.round(Date.now() / 1000),
-      },
-    ]);
+    const sub = pool.sub(relays, [filter]);
 
     sub.on("event", async (event) => {
       const invoice = event.tags.find((t) => t[0] === "bolt11")[1];
@@ -78,6 +72,10 @@ export const Zapvertisement = ({
       clearInterval(intervalId);
     };
   }, []);
+
+  if (error) {
+    return <h1>{error}</h1>;
+  }
 
   return currentMessage ? (
     <div className={styles.root}>
