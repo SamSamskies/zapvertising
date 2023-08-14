@@ -9,7 +9,11 @@ import {
 } from "@/utils";
 import styles from "./Zapvertisement.module.css";
 
-export const Zapvertisement = ({ nip19Entity, durationInMs = 10000 }) => {
+export const Zapvertisement = ({
+  nip19Entity,
+  durationInMs = 10000,
+  minSatsAmount = 1,
+}) => {
   const messageDisplayQueue = useRef([]);
   const [currentMessage, setCurrentMessage] = useState(null);
 
@@ -39,14 +43,19 @@ export const Zapvertisement = ({ nip19Entity, durationInMs = 10000 }) => {
     ]);
 
     sub.on("event", async (event) => {
+      const invoice = event.tags.find((t) => t[0] === "bolt11")[1];
+      const satsAmount = getSatsAmount(invoice);
+
+      if (satsAmount < minSatsAmount) {
+        return;
+      }
+
       const zapRequestEvent = extractZapRequest(event);
       const name = await getNormalizedName(encodeNpub(zapRequestEvent.pubkey));
       const imageUrlRegex =
         /(https?:\/\/.*\.(?:png|jpg|jpeg|jfif|gif|bmp|svg|webp))/gi;
       const text = zapRequestEvent.content.replace(imageUrlRegex, "");
       const image = zapRequestEvent.content.match(imageUrlRegex)?.[0];
-      const invoice = event.tags.find((t) => t[0] === "bolt11")[1];
-      const satsAmount = getSatsAmount(invoice);
 
       messageDisplayQueue.current.push({ name, text, image, satsAmount });
     });
