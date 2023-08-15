@@ -56,6 +56,7 @@ export const Home = () => {
 
     setQrcodeUrl(qrcodeUrl);
     setLiveZapsUrl(liveZapsUrl);
+    setError(null);
   };
 
   return (
