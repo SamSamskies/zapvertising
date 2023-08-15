@@ -8,8 +8,8 @@ export default function Nip19Entity({
   return (
     <Zapvertisement
       nip19Entity={nip19Entity}
-      durationInMs={durationInMs}
-      minSatsAmount={minSatsAmount}
+      durationInMs={durationInMs ? Number(durationInMs) : undefined}
+      minSatsAmount={minSatsAmount ? Number(minSatsAmount) : undefined}
     />
   );
 }
